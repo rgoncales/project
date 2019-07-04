@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 const Book = ({book}) => (
     <div className="book-record" id="tbd">
-      <div> {book.title} </div>
-      <span> {book.note} </span>
-      <span> {book.date} </span>
+      <span> {book.book_title} </span>
+      <span> {book.book_description} </span>
     </div>
 );
 
@@ -14,16 +14,28 @@ class Books extends React.Component {
       this.state = {
         books: [],
         title: '',
-        note: '',
+        description: '',
         date: '',
       }
-
       this.handleInputChange = this.handleInputChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+      this.onSubmit = this.onSubmit.bind(this);
     }
 
-    handleInputChange(event) {
-      const target = event.target;
+    componentDidMount() {
+      this.getBooks();
+    }
+
+    getBooks() {
+      axios.get('http://localhost:4000/books/')
+            .then(res => {
+              this.setState({
+                books: res.data
+                })
+            });
+    }
+
+    handleInputChange(e) {
+      const target = e.target;
       const value = target.value;
       const name = target.name;
 
@@ -32,41 +44,49 @@ class Books extends React.Component {
       });
     }
 
-    handleSubmit(event) {
+    onSubmit(e) {
+      e.preventDefault();
       const newBook = {
-        title: this.state.title,
-        note: this.state.note,
+        book_title: this.state.title,
+        book_description: this.state.description,
       }
+      axios.post('http://localhost:4000/books/add', newBook)
+            .then(res => console.log(res.data))
+            .then(() => this.getBooks());
       this.setState({
-        books: [...this.state.books, newBook]
+        title: '',
+        description: ''
       });
-      event.preventDefault();
     }
 
+    renderBooks() {
+      return this.state.books.map(b => <Book book={b}/>)
+    }
     render() {
-      const renderBooks = this.state.books.map(b => <Book book={b}/>)
       return (
         <div>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.onSubmit}>
             <label>
               Title
               <input
                 name='title'
                 type='text'
+                value={this.state.title}
                 onChange={this.handleInputChange}
               />
             </label>
             <label>
               Note
               <input
-                name='note'
+                name='description'
                 type='text'
+                value={this.state.description}
                 onChange={this.handleInputChange}
               />
             </label>
             <input type="submit" value="Add"/>
           </form>
-          {renderBooks}
+          {this.renderBooks()}
         </div>
       )
     }

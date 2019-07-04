@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bookRoutes = express.Router();
 const PORT = 4000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 let Book = require('./book.model');
@@ -51,6 +53,7 @@ bookRoutes.route('/update/:id').post(function(req, res) {
 });
 
 bookRoutes.route('/add').post(function(req, res) {
+    console.log(req.body)
     let book = new Book(req.body);
     book.save()
         .then(book => {
