@@ -53,7 +53,6 @@ bookRoutes.route('/update/:id').post(function(req, res) {
 });
 
 bookRoutes.route('/add').post(function(req, res) {
-    console.log(req.body)
     let book = new Book(req.body);
     book.save()
         .then(book => {
@@ -62,6 +61,16 @@ bookRoutes.route('/add').post(function(req, res) {
         .catch(err => {
             res.status(400).send('adding new book failed');
         });
+});
+
+bookRoutes.route('/delete').put(function(req, res) {
+  Book.remove()
+    .then(() => {
+        res.status(200).json({'book': 'deleted all books successfully'});
+    })
+    .catch(err => {
+        res.status(400).send('deletion failed');
+  });
 });
 
 app.use('/books', bookRoutes);

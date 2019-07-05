@@ -1,37 +1,17 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-
-const Book = ({book}) => (
-    <div className="book-record" id="tbd">
-      <span> {book.book_title} </span>
-      <span> {book.book_description} </span>
-    </div>
-);
+import BookList from '../components/bookList';
 
 class Books extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        books: [],
         title: '',
         description: '',
         date: '',
       }
       this.handleInputChange = this.handleInputChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    componentDidMount() {
-      this.getBooks();
-    }
-
-    getBooks() {
-      axios.get('http://localhost:4000/books/')
-            .then(res => {
-              this.setState({
-                books: res.data
-                })
-            });
     }
 
     handleInputChange(e) {
@@ -51,20 +31,25 @@ class Books extends React.Component {
         book_description: this.state.description,
       }
       axios.post('http://localhost:4000/books/add', newBook)
-            .then(res => console.log(res.data))
-            .then(() => this.getBooks());
+            .then(res => console.log(res.data));
       this.setState({
         title: '',
         description: ''
       });
     }
 
-    renderBooks() {
-      return this.state.books.map(b => <Book book={b}/>)
+    deleteRecords() {
+      axios.put('http://localhost:4000/books/delete');
     }
+
     render() {
       return (
         <div>
+          <div>
+            <button onClick={() => this.deleteRecords()}>
+              Delete ALL
+            </button>
+          </div>
           <form onSubmit={this.onSubmit}>
             <label>
               Title
@@ -86,7 +71,7 @@ class Books extends React.Component {
             </label>
             <input type="submit" value="Add"/>
           </form>
-          {this.renderBooks()}
+          <BookList/>
         </div>
       )
     }
