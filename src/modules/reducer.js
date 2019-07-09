@@ -1,17 +1,20 @@
 import ACTIONS from "./action";
-import _ from "lodash";
 
 const defaultState = {
-  items: []
+  books: []
 };
 
 const todoReducer = (state = defaultState, action) => {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
+    case ACTIONS.Types.GET_BOOKS: {
+      return Object.assign({}, state, {
+        books: state.books.concat(payload)
+        });
+      }
     case ACTIONS.Types.CREATE_BOOK: {
-      console.log(action);
-      console.log(state);
       return {
-        items: [...state.items, action.payload.book]
+        books: [...state.books, payload]
       }
     }
     default:

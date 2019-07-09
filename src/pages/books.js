@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import axios from 'axios';
 import BookList from '../components/bookList';
 import ACTIONS from "../modules/action";
@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 
 const mapDispatchToProps = dispatch => ({
   createBook: item => dispatch(ACTIONS.createBook(item)),
-  deleteBook: id => dispatch(ACTIONS.deleteBook(id))
 });
 
 class Books extends React.Component {
@@ -84,6 +83,6 @@ class Books extends React.Component {
 }
 
 export default connect(
-  null, 
+  null,
   mapDispatchToProps,
 )(Books);
