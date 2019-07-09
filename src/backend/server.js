@@ -56,7 +56,7 @@ bookRoutes.route('/add').post(function(req, res) {
     let book = new Book(req.body);
     book.save()
         .then(book => {
-            res.status(200).json({'book': 'book added successfully'});
+            res.status(200).json({book});
         })
         .catch(err => {
             res.status(400).send('adding new book failed');

@@ -1,12 +1,17 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from "react-redux";
 
 const Book = ({book}) => (
-    <div className="book-record" id={book._id}>
+    <div className="book-record">
       <span> {book.book_title} </span>
       <span> {book.book_description} </span>
     </div>
 );
+
+const mapStateToProps = state => ({
+  items: state.items
+});
 
 class BookList extends React.Component {
     constructor(props) {
@@ -33,7 +38,7 @@ class BookList extends React.Component {
     }
 
     renderBooks() {
-      return this.state.books.map(b => <Book book={b}/>)
+      return this.state.books.map(b => <Book book={b} key={b._id}/>)
     }
 
     render(){
@@ -45,4 +50,6 @@ class BookList extends React.Component {
     }
 }
 
-export default BookList;
+export default connect(
+  mapStateToProps,
+)(BookList);

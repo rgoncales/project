@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import BookList from '../components/bookList';
+import ACTIONS from "../modules/action";
+import { connect } from "react-redux";
+
+const mapDispatchToProps = dispatch => ({
+  createBook: item => dispatch(ACTIONS.createBook(item)),
+  deleteBook: id => dispatch(ACTIONS.deleteBook(id))
+});
 
 class Books extends React.Component {
     constructor(props) {
@@ -30,8 +37,7 @@ class Books extends React.Component {
         book_title: this.state.title,
         book_description: this.state.description,
       }
-      axios.post('http://localhost:4000/books/add', newBook)
-            .then(res => console.log(res.data));
+      this.props.createBook(newBook);
       this.setState({
         title: '',
         description: ''
@@ -77,4 +83,7 @@ class Books extends React.Component {
     }
 }
 
-export default Books;
+export default connect(
+  null, 
+  mapDispatchToProps,
+)(Books);
