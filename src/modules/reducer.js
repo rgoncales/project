@@ -17,6 +17,9 @@ const todoReducer = (state = defaultState, action) => {
         books: [...state.books, payload]
       }
     }
+    case ACTIONS.Types.DELETE_BOOKS: {
+      return defaultState;
+    }
     default:
       return state;
   }

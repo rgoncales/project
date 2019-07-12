@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 const mapDispatchToProps = dispatch => ({
   createBook: item => dispatch(ACTIONS.createBook(item)),
+  deleteAllBooks: () => dispatch(ACTIONS.deleteBooks()),
 });
 
 class Books extends React.Component {
@@ -44,7 +45,7 @@ class Books extends React.Component {
     }
 
     deleteRecords() {
-      axios.put('http://localhost:4000/books/delete');
+      this.props.deleteAllBooks();
     }
 
     render() {
